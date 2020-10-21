@@ -150,14 +150,14 @@ static int off_charge(void)
 
 	/*---only evt use this---*/
 	val = readl(GPX2PUD);
-	val &= ~(0x3<<12); //dok,pullup/down disable
+	val &= ~(0x3<<12); //dok,pullup/down disable  /* GPX2_6  6260_gpio1 */
 	writel(val,GPX2PUD);
 	
-	/*---volume key setting---*/
+	/*---volume key setting ---*/   /* (GPL2_1) */
 	__REG(GPL2CON) = __REG(GPL2CON)|0x1<<0;
-	__REG(GPL2DAT) = __REG(GPL2DAT)|0x1<<0;//output 1
+	__REG(GPL2DAT) = __REG(GPL2DAT)|0x1<<0;//output 1   /* led2 */
 
-	__REG(GPX2CON) = __REG(GPX2CON)&~0xff; //gpx2.0,gpx2.1
+	__REG(GPX2CON) = __REG(GPX2CON)&~0xff; //gpx2.0,gpx2.1   /* VOL+ VOL- */
 
 	val = readl(GPX2PUD);
 	val &= ~(0xf);
@@ -165,7 +165,7 @@ static int off_charge(void)
 	writel(val,GPX2PUD);
 
 	
-	/*---gpx2.7 cok ---setting--*/
+	/*---gpx2.7 cok ---setting--*/  /* CHG_COK */
 	val = readl(GPX2CON);
 	val &= ~(0xf<<28);
 	writel(val,GPX2CON);
@@ -175,13 +175,13 @@ static int off_charge(void)
 	writel(val,GPX2PUD);
 
 
-	/*---this don't need ---*/
+	/*---this don't need ---*/  /* CHG_UOK */
 	val = readl(GPX1PUD);
 	val &= ~(0x3<<10); //uok,pullup/down disable
 	writel(val,GPX1PUD);
 	
 
-	/*---on key setting gpx0.2--*/
+	/*---on key setting gpx0.2--*/  /* ONO S5M8767A */
 	val = readl(GPX0PUD);
 	val &= ~(0x3<<4); //on_key,pullup/down disable
 	writel(val,GPX0PUD);
@@ -297,7 +297,7 @@ init_fnc_t *init_sequence[] = {
 #endif
 	board_init,		/* basic board dependent setup */
 //#if defined(CONFIG_USE_IRQ)
-	interrupt_init,		/* set up exceptions */
+	interrupt_init,		/* set up exceptions */    /* 此处设置的timer，用于时间计算，非中断方式 */
 //#endif
 	//timer_init,		/* initialize timer */
 #ifdef CONFIG_FSL_ESDHC
@@ -327,6 +327,7 @@ init_fnc_t *init_sequence[] = {
 	NULL,
 };
 
+/* 启动的C函数接口 */
 void start_armboot (void)
 {
 	init_fnc_t **init_fnc_ptr;

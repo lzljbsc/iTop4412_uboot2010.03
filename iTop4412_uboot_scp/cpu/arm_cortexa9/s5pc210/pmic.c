@@ -136,8 +136,8 @@ void PMIC_InitIp(void)
 	u8 uSendData[2];
 	
 	GPIO_Init();
-	GPIO_SetFunctionEach(eGPIO_D1, eGPIO_0, 2);
-	GPIO_SetFunctionEach(eGPIO_D1, eGPIO_1, 2);
+	GPIO_SetFunctionEach(eGPIO_D1, eGPIO_0, 2);   /* I2C_SDA0 */
+	GPIO_SetFunctionEach(eGPIO_D1, eGPIO_1, 2);   /* I2C_SCL0 */
 
 	GPIO_SetDSEach(eGPIO_D1,eGPIO_0,3);
 	GPIO_SetDSEach(eGPIO_D1,eGPIO_1,3);
@@ -191,6 +191,8 @@ void PMIC_InitIp(void)
 #else
 	Is_TC4_Dvt = 0;
 	
+	/* 此处与手册中读到的ID不符,手册ID为0x00,估计手册有误
+	 * 运行时输出的信息为: S5M8767(VER5.0) */
 	lowlevel_init_max8997(0,&id,0);
 	if(id == 0x77)
 	{

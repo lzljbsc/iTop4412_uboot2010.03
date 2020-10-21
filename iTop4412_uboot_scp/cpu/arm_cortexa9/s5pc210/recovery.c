@@ -87,6 +87,7 @@ int recovery_preboot(void)
 
 		value = __REG(GPX1DAT);
 
+		/* 检测HOME按键,如果启动过程按下该按键则进入升级模式 */
 		if(0x2 == (value & 0x2))//not press
 		{
 			printf("SYSTEM ENTER NORMAL BOOT MODE\n");
